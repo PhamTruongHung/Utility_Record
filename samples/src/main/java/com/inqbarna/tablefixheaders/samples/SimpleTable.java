@@ -1,15 +1,14 @@
 package com.inqbarna.tablefixheaders.samples;
 
-import com.inqbarna.tablefixheaders.TableFixHeaders;
-import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
-import com.inqbarna.tablefixheaders.samples.adapters.boilerDataType;
-
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
-import java.sql.Date;
+import com.inqbarna.tablefixheaders.TableFixHeaders;
+import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
+import com.inqbarna.tablefixheaders.samples.adapters.boilerDataType;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,15 +35,13 @@ public class SimpleTable extends Activity {
 		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
 
 		//insert data
-		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', 'IJ', 6.7)");
-
-        //Lay data tu database de dua vao array list boiler
-
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
         String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
 
         Log.d(TAG, "Time: " + currentTime);
+
+        database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
 
         //Tao array list boiler
         boilerDataTypeArrayList = new ArrayList<>();
@@ -62,6 +59,7 @@ public class SimpleTable extends Activity {
             Log.d(TAG, "onCreate:id " + id + " name: " + name + " checkTime: " + checkTime + " apSuat: " + apSuat);
         }
 
+        //Lay data tu database de dua vao array list boiler
         int col = 0;
         int row = 0;
         int col_MAX = 4;
