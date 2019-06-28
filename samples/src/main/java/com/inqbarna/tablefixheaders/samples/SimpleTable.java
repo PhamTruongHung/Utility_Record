@@ -41,7 +41,7 @@ public class SimpleTable extends Activity {
         //Lay data tu database de dua vao array list boiler
         int col = 0;
         int row = 0;
-        int col_MAX = 3;
+        int col_MAX = 4;
 
         Cursor dataFromDatabase = database.GetData("SELECT * FROM boilerData");
         while (dataFromDatabase.moveToNext()){
