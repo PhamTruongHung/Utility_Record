@@ -36,18 +36,9 @@ public class SimpleTable extends Activity {
 		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
 
 		//insert data
-		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', 'IJ', 3.2)");
+		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', 'IJ', 6.7)");
 
         //Lay data tu database de dua vao array list boiler
-
-
-        Cursor dataFromDatabase = database.GetData("SELECT * FROM boiler");
-        while (dataFromDatabase.moveToNext()){
-            //Double apSuat = dataFromDatabase.getDouble(1);
-            //int id = dataFromDatabase.getInt(0);
-
-            //Log.d(TAG, "onCreate:apSuat " + apSuat + " id: " + id);
-        }
 
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
@@ -58,11 +49,17 @@ public class SimpleTable extends Activity {
         //Tao array list boiler
         boilerDataTypeArrayList = new ArrayList<>();
 
-        for (int i = 0; i < 20; i++){
-            boilerDataTypeTmp = new boilerDataType(i, ((String) ("Ivar_" + i)), currentTime, 6.7);
+        Cursor dataFromDatabase = database.GetData("SELECT * FROM boiler");
+        while (dataFromDatabase.moveToNext()){
+            int id = dataFromDatabase.getInt(0);
+            String name = dataFromDatabase.getString(1);
+            String checkTime = dataFromDatabase.getString(2);
+            Double apSuat = dataFromDatabase.getDouble(3);
+
+            boilerDataTypeTmp = new boilerDataType(id, name, checkTime, apSuat);
             boilerDataTypeArrayList.add(boilerDataTypeTmp);
 
-            //Log.d(TAG, "id: " + boilerDataTypeArrayList.get(i).getId() + " 	name: " + boilerDataTypeArrayList.get(i).getName() + " 	size_list: " + boilerDataTypeArrayList.size());
+            Log.d(TAG, "onCreate:id " + id + " name: " + name + " checkTime: " + checkTime + " apSuat: " + apSuat);
         }
 
         int col = 0;
