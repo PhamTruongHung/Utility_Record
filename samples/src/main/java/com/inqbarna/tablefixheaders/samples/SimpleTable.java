@@ -30,23 +30,23 @@ public class SimpleTable extends Activity {
 		setContentView(R.layout.table);
 
         // Tao database boiler data
-		database = new Database(this, "boilerData.sqlite", null, 1);
+		database = new Database(this, "data.sqlite", null, 1);
 
 		//Tao bang boiler data
-		database.QueryData("CREATE TABLE IF NOT EXISTS boilerData(Id INTEGER PRIMARY KEY AUTOINCREMENT, pressureSteam DOUBLE)");
+		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
 
 		//insert data
-		database.QueryData("INSERT INTO boilerData VALUES(null, 3.2)");
+		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', 'IJ', 3.2)");
 
         //Lay data tu database de dua vao array list boiler
-        int col = 0;
-        int row = 0;
-        int col_MAX = 4;
 
-        Cursor dataFromDatabase = database.GetData("SELECT * FROM boilerData");
+
+        Cursor dataFromDatabase = database.GetData("SELECT * FROM boiler");
         while (dataFromDatabase.moveToNext()){
-            Double apSuat = dataFromDatabase.getDouble(1);
-            int id = dataFromDatabase.getInt(0);
+            //Double apSuat = dataFromDatabase.getDouble(1);
+            //int id = dataFromDatabase.getInt(0);
+
+            //Log.d(TAG, "onCreate:apSuat " + apSuat + " id: " + id);
         }
 
 
@@ -62,11 +62,12 @@ public class SimpleTable extends Activity {
             boilerDataTypeTmp = new boilerDataType(i, ((String) ("Ivar_" + i)), currentTime, 6.7);
             boilerDataTypeArrayList.add(boilerDataTypeTmp);
 
-            Log.d(TAG, "id: " + boilerDataTypeArrayList.get(i).getId() + " 	name: " + boilerDataTypeArrayList.get(i).getName() + " 	size_list: " + boilerDataTypeArrayList.size());
+            //Log.d(TAG, "id: " + boilerDataTypeArrayList.get(i).getId() + " 	name: " + boilerDataTypeArrayList.get(i).getName() + " 	size_list: " + boilerDataTypeArrayList.size());
         }
 
-        //Date currentTime = (Date) Calendar.getInstance().getTime();
-        //Log.d(TAG, "Time: " + currentTime);
+        int col = 0;
+        int row = 0;
+        int col_MAX = 4;
 
         String dataIntable[][] = new String[boilerDataTypeArrayList.size()][col_MAX]; // Cong them mot de chua cho cho header
 
