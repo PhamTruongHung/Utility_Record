@@ -2,13 +2,17 @@ package com.inqbarna.tablefixheaders.samples;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
 import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
+import com.inqbarna.tablefixheaders.samples.adapters.boilerDataType;
 
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import static android.content.ContentValues.TAG;
 
@@ -16,12 +20,16 @@ public class SimpleTable extends Activity {
 
 	Database database;
 
+	ArrayList<boilerDataType> boilerDataTypeArrayList;
+	boilerDataType boilerDataTypeTmp;
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table);
 
-		// Tao database boiler data
+        // Tao database boiler data
 		database = new Database(this, "boilerData.sqlite", null, 1);
 
 		//Tao bang boiler data
@@ -30,56 +38,59 @@ public class SimpleTable extends Activity {
 		//insert data
 		database.QueryData("INSERT INTO boilerData VALUES(null, 3.2)");
 
-		//select data
-		int col = 0;
-		int row = 0;
+        //Lay data tu database de dua vao array list boiler
+        int col = 0;
+        int row = 0;
+        int col_MAX = 3;
 
-		 String dataIntable[][] = new String[][]{
-					{
-						"Location",
-						"Time check",
-						"Was ok?"},
-		};
+        Cursor dataFromDatabase = database.GetData("SELECT * FROM boilerData");
+        while (dataFromDatabase.moveToNext()){
+            Double apSuat = dataFromDatabase.getDouble(1);
+            int id = dataFromDatabase.getInt(0);
+        }
 
-        ArrayList<String> list_1 = new ArrayList<String>();
-        ArrayList<String> list_2 = new ArrayList<String>();
-        ArrayList<String> list_3 = new ArrayList<String>();
 
-        ArrayList<ArrayList<String>> listAll = new ArrayList<ArrayList<String>>();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
+        String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
 
-        list_1.add("Hau");
-        list_1.add("Hau");
-        list_1.add("Uti");
+        Log.d(TAG, "Time: " + currentTime);
 
-        list_2.add("Hau");
-        list_2.add("Hau");
-        list_2.add("Uti");
+        //Tao array list boiler
+        boilerDataTypeArrayList = new ArrayList<>();
 
-        list_3.add("Hau");
-        list_3.add("Hau");
-        list_3.add("Uti");
+        for (int i = 0; i < 20; i++){
+            boilerDataTypeTmp = new boilerDataType(i, ((String) ("Ivar_" + i)), currentTime, 6.7);
+            boilerDataTypeArrayList.add(boilerDataTypeTmp);
 
-        listAll.add(list_1);
-        listAll.add(list_2);
-        listAll.add(list_3);
+            Log.d(TAG, "id: " + boilerDataTypeArrayList.get(i).getId() + " 	name: " + boilerDataTypeArrayList.get(i).getName() + " 	size_list: " + boilerDataTypeArrayList.size());
+        }
 
-		String[][] testTable;
-		testTable = new String[3][3];
+        //Date currentTime = (Date) Calendar.getInstance().getTime();
+        //Log.d(TAG, "Time: " + currentTime);
 
-		//testTable = (String[][]) listAll.toArray();
+        String dataIntable[][] = new String[boilerDataTypeArrayList.size()][col_MAX]; // Cong them mot de chua cho cho header
 
-		//Log.d(TAG, "onCreate: " + testTable);
+        for (row = 0; row < boilerDataTypeArrayList.size(); row++){
+            if (row == 0){
+                dataIntable[row][0] = "ID";
+                dataIntable[row][1] = "Name";
+                dataIntable[row][2] = "Time";
+                dataIntable[row][3] = "Pressure Steam";
+            } else {
+                dataIntable[row][0] = String.valueOf(boilerDataTypeArrayList.get(row).getId());
+                dataIntable[row][1] = String.valueOf(boilerDataTypeArrayList.get(row).getName());
+                dataIntable[row][2] = String.valueOf(boilerDataTypeArrayList.get(row).getCheckTime());
+                dataIntable[row][3] = String.valueOf(boilerDataTypeArrayList.get(row).getPressureSteam());
+            }
+        }
 
-		//dataIntable = (String[][]) listAll.toArray();
-
-        ///
-
-		Cursor dataFromDatabase = database.GetData("SELECT * FROM boilerData");
-		while (dataFromDatabase.moveToNext()){
-			col = 0;
-			Double apSuat = dataFromDatabase.getDouble(1);
-			int id = dataFromDatabase.getInt(0);
-		}
+        //Chuyen doi tu array list sang array two demension de dua vao ham.
+//        String dataIntable[][] = new String[][]{
+//                {
+//                        "Location",
+//                        "Time check",
+//                        "Was ok?"},
+//        };
 
 
 		TableFixHeaders tableFixHeaders = (TableFixHeaders) findViewById(R.id.table);
