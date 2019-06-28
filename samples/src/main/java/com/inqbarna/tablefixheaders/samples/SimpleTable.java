@@ -6,6 +6,11 @@ import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
+
+import java.util.ArrayList;
+
+import static android.content.ContentValues.TAG;
 
 public class SimpleTable extends Activity {
 
@@ -31,33 +36,47 @@ public class SimpleTable extends Activity {
 
 		 String dataIntable[][] = new String[][]{
 					{
-						"Header 1",
-						"Header 2",
-						"Header 3",
-						"Header 4",
-						"Header 5",
-						"Header 6",
-						"Header 6"},
-					{
-						"Lorem",
-						"sed",
-						"do",
-						"eiusmod",
-						"tempor",
-						"incididunt",
-						"Header 6"},
-				 	{
-				 		"Lorem",
-						 "sed",
-						 "do",
-						 "eiusmod",
-						 "tempor",
-						 "incididunt",
-						 "Header 6"},
+						"Location",
+						"Time check",
+						"Was ok?"},
 		};
+
+        ArrayList<String> list_1 = new ArrayList<String>();
+        ArrayList<String> list_2 = new ArrayList<String>();
+        ArrayList<String> list_3 = new ArrayList<String>();
+
+        ArrayList<ArrayList<String>> listAll = new ArrayList<ArrayList<String>>();
+
+        list_1.add("Hau");
+        list_1.add("Hau");
+        list_1.add("Uti");
+
+        list_2.add("Hau");
+        list_2.add("Hau");
+        list_2.add("Uti");
+
+        list_3.add("Hau");
+        list_3.add("Hau");
+        list_3.add("Uti");
+
+        listAll.add(list_1);
+        listAll.add(list_2);
+        listAll.add(list_3);
+
+		String[][] testTable;
+		testTable = new String[3][3];
+
+		//testTable = (String[][]) listAll.toArray();
+
+		//Log.d(TAG, "onCreate: " + testTable);
+
+		//dataIntable = (String[][]) listAll.toArray();
+
+        ///
 
 		Cursor dataFromDatabase = database.GetData("SELECT * FROM boilerData");
 		while (dataFromDatabase.moveToNext()){
+			col = 0;
 			Double apSuat = dataFromDatabase.getDouble(1);
 			int id = dataFromDatabase.getInt(0);
 		}
