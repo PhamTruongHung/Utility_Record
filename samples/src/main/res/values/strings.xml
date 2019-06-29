@@ -5,5 +5,8 @@
     <string name="simple_adapter">Simple adapter</string>
     <string name="style_adapter">Style adapter</string>
     <string name="family_adapter">Family adapter</string>
+    <string name="result_text_default" />
+    <string name="button_change_activity" />
+    <string name="check" />
 
 </resources>
