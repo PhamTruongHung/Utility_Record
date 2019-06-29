@@ -30,8 +30,6 @@ public class QRcode extends Activity {
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
 
-    Button btnBoiler;
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
