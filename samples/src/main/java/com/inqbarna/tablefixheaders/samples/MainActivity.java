@@ -19,6 +19,7 @@ public class MainActivity extends ListActivity {
 				new B(getString(R.string.simple_adapter), SimpleTable.class),
 				new B(getString(R.string.style_adapter), StyleTable.class),
 				new B(getString(R.string.family_adapter), FamilyTable.class),
+				new B("QRcode", QRcode.class),
 		};
 		setListAdapter(new ArrayAdapter<B>(this, android.R.layout.simple_list_item_1, android.R.id.text1, b));
 	}
