@@ -34,22 +34,11 @@ public class MainActivity extends ListActivity {
 
 
 		//Tao database cho toan bo he thong
-		// Tao database boiler data
+		// Tao database
 		database = new Database(this, "data.sqlite", null, 1);
-
 		//Tao bang boiler data
 		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
-
-		//insert data
-
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
-		String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
-
-		Log.d(TAG, "Time: " + currentTime);
-
-		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
 		//-------------------
-
 	}
 
 	@Override

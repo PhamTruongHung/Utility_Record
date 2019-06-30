@@ -127,71 +127,64 @@ public class QRcode extends Activity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
-                Log.d(TAG, "txtResult: " + 1);
                 if(qrcodes.size() != 0)
                 {
-                    Log.d(TAG, "txtResult: " + 2);
                     txtResult.post(new Runnable() {
                         @Override
                         public void run() {
-                            cameraSource.stop();
                             Barcode thisBarCode = qrcodes.valueAt(0);
                             txtResult.setText(thisBarCode.rawValue);
-                            Log.d(TAG, "txtResult: " + 3);
-                            Log.d(TAG, "txtResult: " + thisBarCode.rawValue);
-                            Log.d(TAG, "txtResult: " + 4);
-
-                            new CountDownTimer(5000, 1000) {
-
-                                public void onTick(long millisUntilFinished) {
-                                    txtTimePause.setText("Wait for adding data: " + millisUntilFinished / 1000);
+                            switch (thisBarCode.rawValue){
+                                case "Boiler": {
+                                    //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
+                                    //startActivity(intentBoiler);
+                                    txtCheck.setText("Result: Ok");
+                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
+                                    PauseCameraAndWaitTime(5);
+                                    break;
                                 }
-
-                                public void onFinish() {
-                                    txtTimePause.setText("DONE!");
-                                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                        //Request permission
-                                        ActivityCompat.requestPermissions(QRcode.this,
-                                                new String[]{Manifest.permission.CAMERA},RequestCameraPermissionID);
-                                        return;
-                                    }
-                                    try {
-                                        cameraSource.start(cameraPreview.getHolder());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                case "NH3": {
+                                    //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
+                                    //startActivity(intentNH3);
+                                    txtCheck.setText("Result: Ok");
+                                    break;
                                 }
-                            }.start();
-
-
-
-//                            switch (thisBarCode.rawValue){
-//                                case "Boiler": {
-//                                    //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
-//                                    //startActivity(intentBoiler);
-//                                    txtCheck.setText("Result: Ok");
-//                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
-//                                    break;
-//                                }
-//                                case "NH3": {
-//                                    //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
-//                                    //startActivity(intentNH3);
-//                                    txtCheck.setText("Result: Ok");
-//                                    break;
-//                                }
-//                                default:
-//                                    txtCheck.setText("Result: Not Ok");
-//                            }
+                                default:
+                                    txtCheck.setText("Result: Not Ok");
+                            }
                         }
                     });
-
-                    Log.d(TAG, "txtResult: " + 5);
                 }
             }
         });
 
     }
 
+    private void PauseCameraAndWaitTime(int timeInSecond){
+        new CountDownTimer(timeInSecond*1000, 1000) {
 
+            public void onTick(long millisUntilFinished) {
+                cameraSource.stop();
+                txtTimePause.setText("Wait for adding data: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                txtTimePause.setText("DONE!");
+                if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    //Request permission
+                    ActivityCompat.requestPermissions(QRcode.this,
+                            new String[]{Manifest.permission.CAMERA},RequestCameraPermissionID);
+                    return;
+                }
+                try {
+                    cameraSource.start(cameraPreview.getHolder());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                txtCheck.setText("Result:");
+                txtResult.setText("Focus on QR code");
+            }
+        }.start();
+    }
 
 }
