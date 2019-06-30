@@ -2,6 +2,7 @@ package com.inqbarna.tablefixheaders.samples;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.nfc.Tag;
 import android.os.CountDownTimer;
@@ -10,9 +11,16 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
@@ -40,6 +48,8 @@ public class QRcode extends Activity {
 
     Database database;
 
+    String personCheck;
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
@@ -61,6 +71,7 @@ public class QRcode extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        DialogAddPersonCheck();
         //------
         // Tao database boiler data
         database = new Database(this, "data.sqlite", null, 1);
@@ -159,7 +170,7 @@ public class QRcode extends Activity {
                                 currentTime[1] = simpleDateFormat_time.format(Calendar.getInstance().getTime());
                                 //database.QueryData("INSERT INTO boiler VALUES(null, '" + thisBarCode.rawValue + "', '" + currentTime[0] + "', 6.7)");
                                 //database.QueryData("INSERT INTO boiler VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', 6.7)");
-                                database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', 'Hung')");
+                                database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', '" + personCheck + "')");
                                 //Log.d(TAG, "SQL: " + "INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', 'Hung')");
                                 PauseCameraAndWaitTime(3);
                             } else {
@@ -198,6 +209,47 @@ public class QRcode extends Activity {
                 txtResult.setText("Focus on QR code");
             }
         }.start();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_person_check, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.menuAdd){
+            DialogAddPersonCheck();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void DialogAddPersonCheck(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_add_person_check);
+
+        final EditText editTextAddPersonCheck = (EditText) dialog.findViewById(R.id.editTextAddPersonCheck);
+        Button btnAdd = (Button) dialog.findViewById(R.id.buttonAdd);
+
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String personCheckInput = editTextAddPersonCheck.getText().toString();
+                if(personCheckInput.equals("")){
+                    Toast.makeText(QRcode.this, "Add person check name...", Toast.LENGTH_SHORT).show();
+                } else {
+                    personCheck = personCheckInput;
+                    Toast.makeText(QRcode.this, "Added!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        dialog.show();
     }
 
 }

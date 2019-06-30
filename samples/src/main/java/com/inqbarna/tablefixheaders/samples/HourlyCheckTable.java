@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.inqbarna.tablefixheaders.TableFixHeaders;
 import com.inqbarna.tablefixheaders.samples.adapters.MatrixTableAdapter;
-import com.inqbarna.tablefixheaders.samples.adapters.boilerDataType;
 import com.inqbarna.tablefixheaders.samples.adapters.hourlyCheckType;
 
 import java.util.ArrayList;
@@ -48,9 +47,8 @@ public class HourlyCheckTable extends Activity {
         }
 
         //Lay data tu database de dua vao array list boiler
-        int col = 0;
         int row = 0;
-        int col_MAX = 5;
+        int col_MAX = 5; //So cot (thuoc tinh) cua du lieu duoc luu trong bang
 
         String dataIntable[][] = new String[hourlyCheckTypeArrayList.size()][col_MAX]; // Cong them mot de chua cho cho header
 
@@ -69,15 +67,6 @@ public class HourlyCheckTable extends Activity {
                 dataIntable[row][4] = String.valueOf(hourlyCheckTypeArrayList.get(row).getPersonCheck());
             }
         }
-
-        //Chuyen doi tu array list sang array two demension de dua vao ham.
-//        String dataIntable[][] = new String[][]{
-//                {
-//                        "Location",
-//                        "Time check",
-//                        "Was ok?"},
-//        };
-
 
         TableFixHeaders tableFixHeaders = (TableFixHeaders) findViewById(R.id.table);
         MatrixTableAdapter<String> matrixTableAdapter = new MatrixTableAdapter<>(this, dataIntable);

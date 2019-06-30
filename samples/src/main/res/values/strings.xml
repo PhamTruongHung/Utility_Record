@@ -11,5 +11,8 @@
     <string name="focus_on_qr_code">Focus on QR code</string>
     <string name="result">Result:</string>
     <string name="timepause">timePause</string>
+    <string name="add_person_check">Add person check</string>
+    <string name="add">Add</string>
+    <string name="input_name">Input name...</string>
 
 </resources>
