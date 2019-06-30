@@ -28,22 +28,10 @@ public class SimpleTable extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.table);
 
-        // Tao database boiler data
+        // Database duoc tao o mainactivity nhung vao day phai goi lai moi chay duoc
 		database = new Database(this, "data.sqlite", null, 1);
 
-		//Tao bang boiler data
-		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
-
-		//insert data
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss");
-        String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
-
-        Log.d(TAG, "Time: " + currentTime);
-
-        database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
-
-        //Tao array list boiler
+        //Tao array list boiler de nhan du lieu tu database
         boilerDataTypeArrayList = new ArrayList<>();
 
         Cursor dataFromDatabase = database.GetData("SELECT * FROM boiler");

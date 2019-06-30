@@ -1,6 +1,7 @@
 package com.inqbarna.tablefixheaders.samples;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -8,7 +9,15 @@ import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
+
+
 public class MainActivity extends ListActivity {
+
+	Database database;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +31,25 @@ public class MainActivity extends ListActivity {
 				new B("QRcode", QRcode.class),
 		};
 		setListAdapter(new ArrayAdapter<B>(this, android.R.layout.simple_list_item_1, android.R.id.text1, b));
+
+
+		//Tao database cho toan bo he thong
+		// Tao database boiler data
+		database = new Database(this, "data.sqlite", null, 1);
+
+		//Tao bang boiler data
+		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
+
+		//insert data
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
+		String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
+
+		Log.d(TAG, "Time: " + currentTime);
+
+		database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
+		//-------------------
+
 	}
 
 	@Override
@@ -43,4 +71,9 @@ public class MainActivity extends ListActivity {
 			return string;
 		}
 	}
+
+
+
+
+
 }
