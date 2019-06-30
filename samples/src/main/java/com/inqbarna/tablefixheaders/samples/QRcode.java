@@ -66,8 +66,22 @@ public class QRcode extends Activity {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
         final String[] currentTime = new String[1];
 
-        listOfMachine.add("Boiler");
-        listOfMachine.add("NH3");
+        listOfMachine.add("GLYCOL");
+        listOfMachine.add("CHILLER");
+        listOfMachine.add("BCA");
+        listOfMachine.add("COOLING TOWER");
+        listOfMachine.add("IVAR");
+        listOfMachine.add("MIURA 1");
+        listOfMachine.add("MIURA 2");
+        listOfMachine.add("MIURA 3");
+        listOfMachine.add("CE2");
+        listOfMachine.add("CE680");
+        listOfMachine.add("CE46");
+        listOfMachine.add("ZT22");
+        listOfMachine.add("ZT37");
+        listOfMachine.add("ZT55");
+        listOfMachine.add("IR132K");
+        listOfMachine.add("CO2 Evaporator");
         //-------
 
 
