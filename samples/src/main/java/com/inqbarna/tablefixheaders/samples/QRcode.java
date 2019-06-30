@@ -115,17 +115,17 @@ public class QRcode extends Activity {
                                 case "Boiler": {
                                     //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
                                     //startActivity(intentBoiler);
-                                    txtCheck.setText("Ok");
+                                    txtCheck.setText("Result: Ok");
                                     break;
                                 }
                                 case "NH3": {
                                     //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
                                     //startActivity(intentNH3);
-                                    txtCheck.setText("Ok");
+                                    txtCheck.setText("Result: Ok");
                                     break;
                                 }
                                 default:
-                                    txtCheck.setText("Not Ok");
+                                    txtCheck.setText("Result: Not Ok");
                             }
                         }
                     });

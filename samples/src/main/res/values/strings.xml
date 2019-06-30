@@ -9,5 +9,6 @@
     <string name="button_change_activity" />
     <string name="check" />
     <string name="focus_on_qr_code">Focus on QR code</string>
+    <string name="result">Result:</string>
 
 </resources>
