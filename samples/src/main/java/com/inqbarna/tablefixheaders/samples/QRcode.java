@@ -3,10 +3,12 @@ package com.inqbarna.tablefixheaders.samples;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.nfc.Tag;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
 
 public class QRcode extends Activity {
 
@@ -63,8 +67,9 @@ public class QRcode extends Activity {
 
         //insert data
 
-        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
-        final String[] currentTime = new String[1];
+        final SimpleDateFormat simpleDateFormat_date = new SimpleDateFormat("yy.MM.dd");
+        final SimpleDateFormat simpleDateFormat_time = new SimpleDateFormat("HH:mm:ss");
+        final String[] currentTime = new String[2];
 
         listOfMachine.add("GLYCOL");
         listOfMachine.add("CHILLER");
@@ -150,8 +155,12 @@ public class QRcode extends Activity {
                                 txtCheck.setText("Result: Ok");
                                 cameraSource.stop();
                                 txtCheck.setText("Result: Ok");
-                                currentTime[0] = simpleDateFormat.format(Calendar.getInstance().getTime());
-                                database.QueryData("INSERT INTO boiler VALUES(null, '" + thisBarCode.rawValue + "', '" + currentTime[0] + "', 6.7)");
+                                currentTime[0] = simpleDateFormat_date.format(Calendar.getInstance().getTime());
+                                currentTime[1] = simpleDateFormat_time.format(Calendar.getInstance().getTime());
+                                //database.QueryData("INSERT INTO boiler VALUES(null, '" + thisBarCode.rawValue + "', '" + currentTime[0] + "', 6.7)");
+                                //database.QueryData("INSERT INTO boiler VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', 6.7)");
+                                database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', 'Hung')");
+                                //Log.d(TAG, "SQL: " + "INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', 'Hung')");
                                 PauseCameraAndWaitTime(3);
                             } else {
                                 txtCheck.setText("Result: Not Ok");
