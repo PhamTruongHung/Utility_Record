@@ -140,7 +140,7 @@ public class QRcode extends Activity {
                                     txtCheck.setText("Result: Ok");
                                     currentTime[0] = simpleDateFormat.format(Calendar.getInstance().getTime());
                                     database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime[0] + "', 6.7)");
-                                    PauseCameraAndWaitTime(10);
+                                    PauseCameraAndWaitTime(3);
                                     break;
                                 }
                                 case "NH3": {
