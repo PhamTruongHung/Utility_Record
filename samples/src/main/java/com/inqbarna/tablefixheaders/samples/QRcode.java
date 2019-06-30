@@ -2,18 +2,14 @@ package com.inqbarna.tablefixheaders.samples;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.vision.CameraSource;
@@ -23,9 +19,8 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-
-import static android.content.ContentValues.TAG;
 
 public class QRcode extends Activity {
 
@@ -36,6 +31,8 @@ public class QRcode extends Activity {
     BarcodeDetector barcodeDetector;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
+
+    ArrayList<String> listOfMachine = new ArrayList<>();
 
     Database database;
 
@@ -69,7 +66,8 @@ public class QRcode extends Activity {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
         final String[] currentTime = new String[1];
 
-
+        listOfMachine.add("Boiler");
+        listOfMachine.add("NH3");
         //-------
 
 
@@ -132,25 +130,17 @@ public class QRcode extends Activity {
                         public void run() {
                             Barcode thisBarCode = qrcodes.valueAt(0);
                             txtResult.setText(thisBarCode.rawValue);
-                            switch (thisBarCode.rawValue){
-                                case "Boiler": {
-                                    //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
-                                    //startActivity(intentBoiler);
-                                    cameraSource.stop();
-                                    txtCheck.setText("Result: Ok");
-                                    currentTime[0] = simpleDateFormat.format(Calendar.getInstance().getTime());
-                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime[0] + "', 6.7)");
-                                    PauseCameraAndWaitTime(3);
-                                    break;
-                                }
-                                case "NH3": {
-                                    //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
-                                    //startActivity(intentNH3);
-                                    txtCheck.setText("Result: Ok");
-                                    break;
-                                }
-                                default:
-                                    txtCheck.setText("Result: Not Ok");
+
+                            //Kiem tra neu QR code la thuoc trong list machine thi dua vao database
+                            if (listOfMachine.contains(thisBarCode.rawValue)){
+                                txtCheck.setText("Result: Ok");
+                                cameraSource.stop();
+                                txtCheck.setText("Result: Ok");
+                                currentTime[0] = simpleDateFormat.format(Calendar.getInstance().getTime());
+                                database.QueryData("INSERT INTO boiler VALUES(null, '" + thisBarCode.rawValue + "', '" + currentTime[0] + "', 6.7)");
+                                PauseCameraAndWaitTime(3);
+                            } else {
+                                txtCheck.setText("Result: Not Ok");
                             }
                         }
                     });
