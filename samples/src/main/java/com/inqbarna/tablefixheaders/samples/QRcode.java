@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class QRcode extends Activity {
     SurfaceView cameraPreview;
     TextView txtResult;
     TextView txtCheck;
+    TextView txtTimePause;
     BarcodeDetector barcodeDetector;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
@@ -79,6 +81,7 @@ public class QRcode extends Activity {
         cameraPreview = (SurfaceView) findViewById(R.id.cameraPreview);
         txtResult = (TextView) findViewById(R.id.txtResult);
         txtCheck = (TextView) findViewById(R.id.txtCheck);
+        txtTimePause = (TextView) findViewById(R.id.timePause);
 
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.QR_CODE)
@@ -124,37 +127,71 @@ public class QRcode extends Activity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> qrcodes = detections.getDetectedItems();
-
+                Log.d(TAG, "txtResult: " + 1);
                 if(qrcodes.size() != 0)
                 {
+                    Log.d(TAG, "txtResult: " + 2);
                     txtResult.post(new Runnable() {
                         @Override
                         public void run() {
+                            cameraSource.stop();
                             Barcode thisBarCode = qrcodes.valueAt(0);
                             txtResult.setText(thisBarCode.rawValue);
+                            Log.d(TAG, "txtResult: " + 3);
+                            Log.d(TAG, "txtResult: " + thisBarCode.rawValue);
+                            Log.d(TAG, "txtResult: " + 4);
 
-                            switch (thisBarCode.rawValue){
-                                case "Boiler": {
-                                    //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
-                                    //startActivity(intentBoiler);
-                                    txtCheck.setText("Result: Ok");
-                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
-                                    break;
+                            new CountDownTimer(5000, 1000) {
+
+                                public void onTick(long millisUntilFinished) {
+                                    txtTimePause.setText("Wait for adding data: " + millisUntilFinished / 1000);
                                 }
-                                case "NH3": {
-                                    //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
-                                    //startActivity(intentNH3);
-                                    txtCheck.setText("Result: Ok");
-                                    break;
+
+                                public void onFinish() {
+                                    txtTimePause.setText("DONE!");
+                                    if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                        //Request permission
+                                        ActivityCompat.requestPermissions(QRcode.this,
+                                                new String[]{Manifest.permission.CAMERA},RequestCameraPermissionID);
+                                        return;
+                                    }
+                                    try {
+                                        cameraSource.start(cameraPreview.getHolder());
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                                default:
-                                    txtCheck.setText("Result: Not Ok");
-                            }
+                            }.start();
+
+
+
+//                            switch (thisBarCode.rawValue){
+//                                case "Boiler": {
+//                                    //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
+//                                    //startActivity(intentBoiler);
+//                                    txtCheck.setText("Result: Ok");
+//                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
+//                                    break;
+//                                }
+//                                case "NH3": {
+//                                    //Intent intentNH3 = new Intent(MainActivity.this, NH3Activity.class);
+//                                    //startActivity(intentNH3);
+//                                    txtCheck.setText("Result: Ok");
+//                                    break;
+//                                }
+//                                default:
+//                                    txtCheck.setText("Result: Not Ok");
+//                            }
                         }
                     });
+
+                    Log.d(TAG, "txtResult: " + 5);
                 }
             }
         });
 
     }
+
+
+
 }

@@ -10,5 +10,6 @@
     <string name="check" />
     <string name="focus_on_qr_code">Focus on QR code</string>
     <string name="result">Result:</string>
+    <string name="timepause">timePause</string>
 
 </resources>
