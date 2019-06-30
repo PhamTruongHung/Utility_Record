@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -20,6 +21,10 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
 
 public class QRcode extends Activity {
 
@@ -29,6 +34,8 @@ public class QRcode extends Activity {
     BarcodeDetector barcodeDetector;
     CameraSource cameraSource;
     final int RequestCameraPermissionID = 1001;
+
+    Database database;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -51,6 +58,21 @@ public class QRcode extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //------
+        // Tao database boiler data
+        database = new Database(this, "data.sqlite", null, 1);
+
+        //insert data
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
+        final String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
+
+        Log.d(TAG, "Time: " + currentTime);
+
+
+        //-------
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
 
@@ -116,6 +138,7 @@ public class QRcode extends Activity {
                                     //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
                                     //startActivity(intentBoiler);
                                     txtCheck.setText("Result: Ok");
+                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
                                     break;
                                 }
                                 case "NH3": {
