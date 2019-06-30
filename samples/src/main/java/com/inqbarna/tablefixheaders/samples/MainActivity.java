@@ -29,6 +29,7 @@ public class MainActivity extends ListActivity {
 				new B(getString(R.string.style_adapter), StyleTable.class),
 				new B(getString(R.string.family_adapter), FamilyTable.class),
 				new B("QRcode", QRcode.class),
+				new B("Hourly Check", HourlyCheckTable.class),
 		};
 		setListAdapter(new ArrayAdapter<B>(this, android.R.layout.simple_list_item_1, android.R.id.text1, b));
 
@@ -38,6 +39,8 @@ public class MainActivity extends ListActivity {
 		database = new Database(this, "data.sqlite", null, 1);
 		//Tao bang boiler data
 		database.QueryData("CREATE TABLE IF NOT EXISTS boiler(Id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(200), checkTime VARCHAR(200), pressureSteam DOUBLE)");
+		//Tao bang hourly_check
+		database.QueryData("CREATE TABLE IF NOT EXISTS hourly_check(Id INTEGER PRIMARY KEY AUTOINCREMENT, dateOfCheck VARCHAR(200), timeOfCheck VARCHAR(200), location VARCHAR(200), personCheck VARCHAR(200))");
 		//-------------------
 	}
 

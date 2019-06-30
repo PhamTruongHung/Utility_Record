@@ -66,10 +66,8 @@ public class QRcode extends Activity {
 
         //insert data
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
-        final String currentTime = simpleDateFormat.format(Calendar.getInstance().getTime());
-
-        Log.d(TAG, "Time: " + currentTime);
+        final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy.MM.dd HH:mm:ss");
+        final String[] currentTime = new String[1];
 
 
         //-------
@@ -138,9 +136,11 @@ public class QRcode extends Activity {
                                 case "Boiler": {
                                     //ntent intentBoiler = new Intent(MainActivity.this, BoilerActivity.class);
                                     //startActivity(intentBoiler);
+                                    cameraSource.stop();
                                     txtCheck.setText("Result: Ok");
-                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime + "', 6.7)");
-                                    PauseCameraAndWaitTime(5);
+                                    currentTime[0] = simpleDateFormat.format(Calendar.getInstance().getTime());
+                                    database.QueryData("INSERT INTO boiler VALUES(null, 'Ivar', '" + currentTime[0] + "', 6.7)");
+                                    PauseCameraAndWaitTime(10);
                                     break;
                                 }
                                 case "NH3": {

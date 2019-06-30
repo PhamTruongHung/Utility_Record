@@ -11,6 +11,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".QRcode"></activity>
+        <activity android:name=".HourlyCheckTable"></activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
