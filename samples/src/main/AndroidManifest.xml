@@ -22,9 +22,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".SimpleTable"
-            android:label="@string/simple_adapter"></activity>
-        <activity
             android:name=".StyleTable"
             android:label="@string/style_adapter"></activity>
         <activity

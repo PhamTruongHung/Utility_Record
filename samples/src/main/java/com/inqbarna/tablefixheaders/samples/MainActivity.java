@@ -25,7 +25,6 @@ public class MainActivity extends ListActivity {
 		setContentView(R.layout.activity_main);
 
 		B b[] = new B[] {
-				new B(getString(R.string.simple_adapter), SimpleTable.class),
 				new B(getString(R.string.style_adapter), StyleTable.class),
 				new B(getString(R.string.family_adapter), FamilyTable.class),
 				new B("QRcode", QRcode.class),
