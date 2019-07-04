@@ -7,6 +7,9 @@ public class hourlyCheckType {
     private String location;
     private String personCheck;
 
+    public hourlyCheckType() {
+    }
+
     public hourlyCheckType(int id, String dateOfCheck, String timeOfCheck, String location, String personCheck) {
         this.id = id;
         this.dateOfCheck = dateOfCheck;

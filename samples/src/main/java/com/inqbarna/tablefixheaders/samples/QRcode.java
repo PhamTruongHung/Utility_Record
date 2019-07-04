@@ -8,6 +8,7 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,11 +25,16 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.inqbarna.tablefixheaders.samples.adapters.hourlyCheckType;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import static android.content.ContentValues.TAG;
 
 public class QRcode extends Activity {
 
@@ -45,6 +51,9 @@ public class QRcode extends Activity {
     Database database;
 
     String personCheck;
+
+    DatabaseReference databaseReference_QR;
+    hourlyCheckType hourlyCheckTypeTmp = new hourlyCheckType();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -74,8 +83,8 @@ public class QRcode extends Activity {
 
         //insert data
 
-        final SimpleDateFormat simpleDateFormat_date = new SimpleDateFormat("yy.MM.dd");
-        final SimpleDateFormat simpleDateFormat_time = new SimpleDateFormat("HH:mm:ss");
+        final SimpleDateFormat simpleDateFormat_date = new SimpleDateFormat("yy MM dd");
+        final SimpleDateFormat simpleDateFormat_time = new SimpleDateFormat("HH mm ss");
         final String[] currentTime = new String[2];
 
         listOfMachine.add("GLYCOL");
@@ -95,7 +104,7 @@ public class QRcode extends Activity {
         listOfMachine.add("IR132K");
         listOfMachine.add("CO2 Evaporator");
         //-------
-
+        databaseReference_QR = FirebaseDatabase.getInstance().getReference();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qrcode);
@@ -164,11 +173,12 @@ public class QRcode extends Activity {
                                 txtCheck.setText("Result: Ok");
                                 currentTime[0] = simpleDateFormat_date.format(Calendar.getInstance().getTime());
                                 currentTime[1] = simpleDateFormat_time.format(Calendar.getInstance().getTime());
-                                //database.QueryData("INSERT INTO boiler VALUES(null, '" + thisBarCode.rawValue + "', '" + currentTime[0] + "', 6.7)");
-                                //database.QueryData("INSERT INTO boiler VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', 6.7)");
+                                //Add to SQLite database
                                 database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', '" + personCheck + "')");
-                                //Log.d(TAG, "SQL: " + "INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', 'Hung')");
-                                PauseCameraAndWaitTime(3);
+                                //Add to firebase
+                                //hourlyCheckTypeTmp = new hourlyCheckType(1, currentTime[0], currentTime[1], thisBarCode.rawValue, personCheck);
+                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(0);
+                                PauseCameraAndWaitTime(5);
                             } else {
                                 txtCheck.setText("Result: Not Ok");
                             }
