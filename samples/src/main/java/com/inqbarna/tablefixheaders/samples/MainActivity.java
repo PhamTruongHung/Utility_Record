@@ -8,6 +8,14 @@ import android.widget.ListView;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.inqbarna.tablefixheaders.samples.adapters.hourlyCheckType;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -18,6 +26,10 @@ import static android.content.ContentValues.TAG;
 public class MainActivity extends ListActivity {
 
 	Database database;
+
+	DatabaseReference databaseReference;
+
+	hourlyCheckType hourlyCheckTypeTmp = new hourlyCheckType(1, "19.07.04", "23:02:04", "Miura 3", "Hung");
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +53,11 @@ public class MainActivity extends ListActivity {
 		//Tao bang hourly_check
 		database.QueryData("CREATE TABLE IF NOT EXISTS hourly_check(Id INTEGER PRIMARY KEY AUTOINCREMENT, dateOfCheck VARCHAR(200), timeOfCheck VARCHAR(200), location VARCHAR(200), personCheck VARCHAR(200))");
 		//-------------------
+
+		databaseReference = FirebaseDatabase.getInstance().getReference();
+
+		databaseReference.child("Utility").child("Miura 2").child("Steam pressure").setValue(6.7);
+		databaseReference.child("Hourly check").setValue(hourlyCheckTypeTmp);
 	}
 
 	@Override
