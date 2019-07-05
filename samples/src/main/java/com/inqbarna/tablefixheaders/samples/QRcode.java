@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.pm.PackageManager;
 import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.inqbarna.tablefixheaders.samples.adapters.hourlyCheckType;
@@ -177,7 +179,16 @@ public class QRcode extends Activity {
                                 database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', '" + personCheck + "')");
                                 //Add to firebase
                                 //hourlyCheckTypeTmp = new hourlyCheckType(1, currentTime[0], currentTime[1], thisBarCode.rawValue, personCheck);
-                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(personCheck);
+                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(personCheck, new DatabaseReference.CompletionListener() {
+                                    @Override
+                                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                        if (databaseError == null){
+                                            Toast.makeText(QRcode.this, "Saved on firebase!!!", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(QRcode.this, "Something wrong!!!", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+                                });
                                 PauseCameraAndWaitTime(5);
                             } else {
                                 txtCheck.setText("Result: Not Ok");
