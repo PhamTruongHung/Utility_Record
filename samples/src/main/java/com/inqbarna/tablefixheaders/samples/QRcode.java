@@ -83,8 +83,8 @@ public class QRcode extends Activity {
 
         //insert data
 
-        final SimpleDateFormat simpleDateFormat_date = new SimpleDateFormat("yy MM dd");
-        final SimpleDateFormat simpleDateFormat_time = new SimpleDateFormat("HH mm ss");
+        final SimpleDateFormat simpleDateFormat_date = new SimpleDateFormat("yyyy-MM-dd");
+        final SimpleDateFormat simpleDateFormat_time = new SimpleDateFormat("HH:mm:ss");
         final String[] currentTime = new String[2];
 
         listOfMachine.add("GLYCOL");
@@ -177,7 +177,7 @@ public class QRcode extends Activity {
                                 database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', '" + personCheck + "')");
                                 //Add to firebase
                                 //hourlyCheckTypeTmp = new hourlyCheckType(1, currentTime[0], currentTime[1], thisBarCode.rawValue, personCheck);
-                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(0);
+                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(personCheck);
                                 PauseCameraAndWaitTime(5);
                             } else {
                                 txtCheck.setText("Result: Not Ok");
