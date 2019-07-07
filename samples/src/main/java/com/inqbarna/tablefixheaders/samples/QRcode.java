@@ -56,6 +56,7 @@ public class QRcode extends Activity {
 
     DatabaseReference databaseReference_QR;
     hourlyCheckType hourlyCheckTypeTmp = new hourlyCheckType();
+    HourlyCheckType_2 hourlyCheckTypeTmp_2 = new HourlyCheckType_2("default", "default");
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -178,8 +179,10 @@ public class QRcode extends Activity {
                                 //Add to SQLite database
                                 database.QueryData("INSERT INTO hourly_check VALUES(null, '" + currentTime[0] + "', '" + currentTime[1] + "', '" + thisBarCode.rawValue + "', '" + personCheck + "')");
                                 //Add to firebase
-                                //hourlyCheckTypeTmp = new hourlyCheckType(1, currentTime[0], currentTime[1], thisBarCode.rawValue, personCheck);
-                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).child(currentTime[1]).setValue(personCheck, new DatabaseReference.CompletionListener() {
+                                hourlyCheckTypeTmp_2.setTimeCheck(currentTime[1]);
+                                hourlyCheckTypeTmp_2.setPersonCheck(personCheck);
+
+                                databaseReference_QR.child("Hourly check").child(currentTime[0]).child(thisBarCode.rawValue).push().setValue(hourlyCheckTypeTmp_2, new DatabaseReference.CompletionListener() {
                                     @Override
                                     public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
                                         if (databaseError == null){
